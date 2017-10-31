@@ -40,9 +40,5 @@ public class UserMealsUtil {
                     userMeal.getCalories(), (totalCaloriesByDate.get(userMeal.getLocalDate()) > caloriesPerDay)))
                 .collect(Collectors.toList());
 
-        for (UserMealWithExceed meal: resultMealList) {
-            System.out.println(meal);
-        }
-        return null;
     }
 }
