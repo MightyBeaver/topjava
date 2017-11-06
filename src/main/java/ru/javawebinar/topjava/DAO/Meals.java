@@ -6,4 +6,12 @@ import java.util.List;
 
 public interface Meals {
     List<Meal> getAll();
+
+    void add(Meal meal);
+
+    void update(Meal meal);
+
+    void delete(int id);
+
+    Meal getById(int id);
 }
