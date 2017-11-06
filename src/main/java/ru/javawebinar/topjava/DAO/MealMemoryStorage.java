@@ -7,7 +7,7 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
-public class HardCodedMeals implements Meals {
+public class MealMemoryStorage implements Meals {
 
     private static final List<Meal> meals = Arrays.asList(
             new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
@@ -19,7 +19,7 @@ public class HardCodedMeals implements Meals {
     );
 
     @Override
-    public List<Meal> getAllMeals() {
+    public List<Meal> getAll() {
         return meals;
     }
 }

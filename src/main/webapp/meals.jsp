@@ -15,12 +15,7 @@
         <th>Калории</th>
     </tr>
     <c:forEach items="${mealsWithExceed}" var="meal">
-        <c:if test="${meal.exceed == false}">
-            <tr style="color: green">
-        </c:if>
-        <c:if test="${meal.exceed == true}">
-            <tr style="color: red">
-        </c:if>
+        <tr style="color:${meal.exceed ? "red" : "green"}">
             <c:set var="dateTime" value="${fn:replace(meal.dateTime, 'T', ' ')}" />
             <td align="center">${dateTime}</td>
             <td align="center">${meal.description}</td>
