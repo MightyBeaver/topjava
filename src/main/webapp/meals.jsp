@@ -24,7 +24,6 @@
     <c:forEach items="${mealsWithExceed}" var="meal">
         <tr style="color:${meal.exceed ? "red" : "green"}">
             <c:set var="dateTime" value="${fn:replace(meal.dateTime, 'T', ' ')}" />
-            <td>${meal.id}</td>
             <td>${dateTime}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>

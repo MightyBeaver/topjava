@@ -20,59 +20,71 @@ import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 public class MealServlet extends HttpServlet {
-    private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    private static final int CALORIES_PER_DAY = 2000;
-    private static final Meals mealsDAO = new MealMemoryStorage();
-    private static String INSERT_OR_EDIT = "/mealForm.jsp";
-    private static String SHOW_MEALS = "/meals.jsp";
+    private Logger log = LoggerFactory.getLogger(MealServlet.class);
+    private int CALORIES_PER_DAY = 2000;
+    private Meals mealsDAO = new MealMemoryStorage();
+    private String INSERT_OR_EDIT = "/mealForm.jsp";
+    private String SHOW_MEALS = "/meals.jsp";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to meals");
-        String forwardLocation;
         String action = request.getParameter("action");
         if(action == null) {
             action = "listMeals";
         }
         log.debug(action);
-        if (action.equalsIgnoreCase("delete")){
-            int id = Integer.parseInt(request.getParameter("id"));
-            mealsDAO.delete(id);
-            response.sendRedirect("meals");
-        } else if (action.equalsIgnoreCase("edit")){
-            forwardLocation = INSERT_OR_EDIT;
-            int id = Integer.parseInt(request.getParameter("id"));
-            Meal meal = mealsDAO.getById(id);
-            request.setAttribute("meal", meal);
-            request.getRequestDispatcher(forwardLocation).forward(request, response);
-        } else if (action.equalsIgnoreCase("listMeals")){
-            forwardLocation = SHOW_MEALS;
-            List<MealWithExceed> mealsWithExceed =
-                    MealsUtil.getFilteredWithExceeded(mealsDAO.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY);
-            request.setAttribute("mealsWithExceed",mealsWithExceed);
-            request.getRequestDispatcher(forwardLocation).forward(request, response);
-        } else if (action.equalsIgnoreCase("insert")){
-            forwardLocation = INSERT_OR_EDIT;
-            request.getRequestDispatcher(forwardLocation).forward(request, response);
+        switch (action) {
+            case "delete": deleteMeal(request,response); break;
+            case "edit" : editMeal(request,response); break;
+            case "listMeals" : listMeals(request,response); break;
+            case "insert": insertMeal(request,response); break;
         }
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        log.debug("meal post requsest");
+        log.debug("meal post request");
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"));
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
         Meal meal = new Meal(dateTime, description, calories);
-        try {
-            log.debug("update");
-            int id = Integer.parseInt(request.getParameter("id"));
-            meal.setId(id);
-            mealsDAO.update(meal);
-        } catch (NumberFormatException e) {
+        String idParam = request.getParameter("id");
+        log.debug("idParam: "+idParam);
+        if (idParam.equals("")) {
             log.debug("add");
             mealsDAO.add(meal);
+        } else {
+            log.debug("update");
+            int id = Integer.parseInt(idParam);
+            meal.setId(id);
+            mealsDAO.update(meal);
         }
-        doGet(request, response);
+        response.sendRedirect("meals");
+    }
+
+    private void deleteMeal(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        mealsDAO.delete(id);
+        response.sendRedirect("meals");
+    }
+
+    private void editMeal(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Meal meal = mealsDAO.getById(id);
+        request.setAttribute("meal", meal);
+        request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
+    }
+
+    private void listMeals(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
+        List<MealWithExceed> mealsWithExceed =
+                MealsUtil.getFilteredWithExceeded(mealsDAO.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY);
+        request.setAttribute("mealsWithExceed",mealsWithExceed);
+        request.getRequestDispatcher(SHOW_MEALS).forward(request, response);
+    }
+
+    private void insertMeal(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
+        request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
     }
 }

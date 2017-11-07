@@ -13,8 +13,7 @@
 <form action="meals" method="POST" style="text-align: center">
     <table align="center">
         <tr>
-            <td>ID</td>
-            <td><input type="text" readonly="readonly" name="id" value="${meal.id}"/></td>
+            <td><input type="hidden" readonly="readonly" name="id" value="${meal.id}"/></td>
         </tr>
         <tr>
             <td>Дата</td>
