@@ -33,7 +33,7 @@ public class MealMemoryStorage implements Meals {
 
     @Override
     public List<Meal> getAll() {
-        return mealStorage.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(mealStorage.values());
     }
 
     @Override

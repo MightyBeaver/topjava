@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,7 @@ public class MealServlet extends HttpServlet {
     private Meals mealsDAO = new MealMemoryStorage();
     private String INSERT_OR_EDIT = "/mealForm.jsp";
     private String SHOW_MEALS = "/meals.jsp";
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd HH:mm");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,7 +40,6 @@ public class MealServlet extends HttpServlet {
             case "delete": deleteMeal(request,response); break;
             case "edit" : editMeal(request,response); break;
             case "listMeals" : listMeals(request,response); break;
-            case "insert": insertMeal(request,response); break;
         }
     }
 
@@ -52,7 +53,7 @@ public class MealServlet extends HttpServlet {
         Meal meal = new Meal(dateTime, description, calories);
         String idParam = request.getParameter("id");
         log.debug("idParam: "+idParam);
-        if (idParam.equals("")) {
+        if (idParam.equals("-1")) {
             log.debug("add");
             mealsDAO.add(meal);
         } else {
@@ -71,8 +72,15 @@ public class MealServlet extends HttpServlet {
     }
 
     private void editMeal(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Meal meal = mealsDAO.getById(id);
+        String idParam = request.getParameter("id");
+        Meal meal;
+        if(idParam == null) {
+            String now = LocalDateTime.now().format(formatter);
+            meal = new Meal(LocalDateTime.parse(now,formatter),"",100);
+        } else {
+            int id = Integer.parseInt(idParam);
+            meal = mealsDAO.getById(id);
+        }
         request.setAttribute("meal", meal);
         request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
     }
@@ -84,7 +92,4 @@ public class MealServlet extends HttpServlet {
         request.getRequestDispatcher(SHOW_MEALS).forward(request, response);
     }
 
-    private void insertMeal(HttpServletRequest request, HttpServletResponse response) throws ServletException,IOException {
-        request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
-    }
 }

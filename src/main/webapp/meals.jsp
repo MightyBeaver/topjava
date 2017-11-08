@@ -15,7 +15,6 @@
 <h2 align="center">Приемы пищи</h2>
 <table border="1" align="center">
     <tr>
-        <th>ID</th>
         <th>Время</th>
         <th>Описание</th>
         <th>Калории</th>
@@ -34,7 +33,7 @@
 </table>
 <br>
 <div style="text-align:center">
-    <a href="meals?action=insert">Новый прием пищи</a>
+    <a href="meals?action=edit">Новый прием пищи</a>
 </div>
 </body>
 </html>
