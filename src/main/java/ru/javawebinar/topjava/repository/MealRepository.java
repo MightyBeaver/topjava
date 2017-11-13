@@ -1,15 +1,21 @@
 package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealWithExceed;
 
-import java.util.Collection;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface MealRepository {
-    Meal save(Meal meal);
+    Meal save(int userId, Meal meal);
 
-    void delete(int id);
+    // false if not found
+    boolean delete(int userId, int id);
 
-    Meal get(int id);
+    // null if not found
+    Meal get(int userId, int id);
 
-    Collection<Meal> getAll();
+    List<Meal> getAll(int userId);
+
+    List<MealWithExceed> getAllFiltered(int userId, LocalDateTime start, LocalDateTime end, int calories);
 }
