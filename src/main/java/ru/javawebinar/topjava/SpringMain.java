@@ -18,7 +18,7 @@ public class SpringMain {
             AdminRestController adminController = appCtx.getBean(AdminRestController.class);
             MealRestController mealController = appCtx.getBean(MealRestController.class);
             //mealController.getAll().forEach(System.out::println);
-            getAllFilteredTest(mealController);
+            //getAllFilteredTest(mealController);
             //updateTest(mealController);
             //createTest(mealController);
             //getTest(mealController);
@@ -53,9 +53,9 @@ public class SpringMain {
         mealController.getAll().forEach(System.out::println);
         mealController.delete(7);
     }
-    private static void getAllFilteredTest(MealRestController mealController) {
+    /*private static void getAllFilteredTest(MealRestController mealController) {
         //все записи
-        mealController.getAllFiltered(null,null,
+        /mealController.getAllFiltered(null,null,
                 null,null)
                 .forEach(System.out::println);
         //С 0 до 13 часов, любой день
@@ -70,5 +70,5 @@ public class SpringMain {
         mealController.getAllFiltered(LocalTime.MIN,LocalTime.of(13, 0),
                 null, LocalDate.of(2015, Month.MAY,30))
                 .forEach(System.out::println);
-    }
+    }*/
 }
