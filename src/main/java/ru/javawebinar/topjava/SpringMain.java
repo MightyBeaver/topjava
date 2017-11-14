@@ -15,14 +15,16 @@ public class SpringMain {
     public static void main(String[] args) {
         // java 7 Automatic resource management
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            MealRestController mealController = appCtx.getBean(MealRestController.class);
+            /*MealRestController mealController = appCtx.getBean(MealRestController.class);
             Meal mealToUpdate = new Meal(LocalDateTime.of(2016, Month.MAY, 30, 10,
                     0), "Завтрак", 510);
             mealToUpdate.setId(1);
             mealController.update(mealToUpdate);
             mealController.getAll().forEach(System.out::println);
             mealToUpdate.setId(7);                                  //чужая еда
-            mealController.update(mealToUpdate);
+            mealController.update(mealToUpdate);*/
+            AdminRestController adminController = appCtx.getBean(AdminRestController.class);
+            adminController.getAll().forEach(System.out::println);
         }
     }
 

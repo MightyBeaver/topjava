@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 @Repository
 public class InMemoryUserRepositoryImpl implements UserRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
-    private static final Comparator<User> USER_NAME_COMPARATOR = Comparator.comparing(AbstractNamedEntity::getName);
+    private static final Comparator<User> USER_COMPARATOR =
+            Comparator.comparing(User::getName).thenComparing(User::getEmail);
     private static final List<User> userList = Arrays.asList(
             new User(null,"Antidotsrd","doshiq@wanwan.ua","qwerty", Role.ROLE_USER),
             new User(null,"Dakurobotto","jackx@tekken.jp","12345", Role.ROLE_USER),
@@ -26,7 +27,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
             new User(null,"Marakaratma","chernoe@serdce.wanwan","KeepopieOP", Role.ROLE_ADMIN, Role.ROLE_USER),
             new User(null,"Cheeezets","cheezets@cinema.ua","kek", Role.ROLE_USER),
             new User(null,"TheVK","salt@cod.kek","MeiRules", Role.ROLE_USER),
-            new User(null,"TheVK","salt@mw2.kek","MeiRules", Role.ROLE_USER)
+            new User(null,"TheVK","pepper@mw2.kek","MeiRules", Role.ROLE_USER)
     );
     private Map<Integer,User> userRepository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
@@ -60,7 +61,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     public List<User> getAll() {
         log.info("getAll");
         return userRepository.values().stream()
-                .sorted(USER_NAME_COMPARATOR)
+                .sorted(USER_COMPARATOR)
                 .collect(Collectors.toList());
     }
 
