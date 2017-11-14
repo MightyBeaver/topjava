@@ -17,5 +17,5 @@ public interface MealRepository {
 
     List<Meal> getAll(int userId);
 
-    List<MealWithExceed> getAllFiltered(int userId, LocalDateTime start, LocalDateTime end, int calories);
+    List<Meal> getAllFiltered(int userId, LocalDateTime start, LocalDateTime end);
 }

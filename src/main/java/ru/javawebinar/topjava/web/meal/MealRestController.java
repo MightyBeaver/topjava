@@ -65,10 +65,7 @@ public class MealRestController {
 
     public void update(Meal meal) {
         log.info("update {} with id={}", meal, meal.getId());
-        if(meal.getUserId() != AuthorizedUser.id()) {
-            throw new NotFoundException("Illegal operation.");
-        }
         assureIdConsistent(meal, meal.getId());
-        service.update(meal);
+        service.update(AuthorizedUser.id(),meal);
     }
 }

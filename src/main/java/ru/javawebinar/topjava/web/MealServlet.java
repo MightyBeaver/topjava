@@ -53,7 +53,6 @@ public class MealServlet extends HttpServlet {
         if (meal.isNew()) {
             mealController.create(meal);
         } else {
-            meal.setUserId(Integer.parseInt(request.getParameter("userId")));
             mealController.update(meal);
         }
         response.sendRedirect("meals");

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDateTime;
@@ -28,8 +29,8 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public void update(Meal meal) {
-        checkNotFoundWithId(repository.save(meal.getUserId(),meal),meal.getId());
+    public void update(int userId, Meal meal) throws NotFoundException {
+        checkNotFoundWithId(repository.save(userId,meal),meal.getId());
     }
 
     @Override
@@ -49,6 +50,8 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public List<MealWithExceed> getAllFiltered(int userId, LocalDateTime start, LocalDateTime end, int calories) {
-        return repository.getAllFiltered(userId,start,end,calories);
+        List<Meal> filteredByDate = repository.getAllFiltered(userId,start,end);
+        return MealsUtil.getFilteredWithExceeded(filteredByDate,
+                start.toLocalTime(),end.toLocalTime(),calories);
     }
 }
