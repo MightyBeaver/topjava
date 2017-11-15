@@ -63,7 +63,7 @@ public class MealRestController {
         service.delete(AuthorizedUser.id(),id);
     }
 
-    public void update(Meal meal) {
+    public void update(Meal meal,int id) {
         log.info("update {} with id={}", meal, meal.getId());
         assureIdConsistent(meal, meal.getId());
         service.update(AuthorizedUser.id(),meal);
