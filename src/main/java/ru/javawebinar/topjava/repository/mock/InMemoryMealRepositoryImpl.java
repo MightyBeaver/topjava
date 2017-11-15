@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,20 +28,13 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         mealRepository.get(7).setUserId(2); //для теста
     }
 
-    private boolean belongsToUser(int userId, Meal meal) {
-        return  meal != null && meal.getUserId() == userId;
-    }
-
     @Override
     public Meal save(int userId, Meal meal) {
         log.info("save {}", meal);
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-        } else {
-            Meal mealToUpdate = mealRepository.get(meal.getId());
-            if(!belongsToUser(userId, mealToUpdate)){
-                return null;
-            }
+        } else if (get(userId,meal.getId())==null) {
+            return null;
         }
         meal.setUserId(userId);
         mealRepository.put(meal.getId(), meal);
@@ -50,34 +44,30 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     @Override
     public boolean delete(int userId, int id) {
         log.info("delete {}", id);
-        Meal meal = mealRepository.get(id);
-        return belongsToUser(userId,meal) && mealRepository.remove(id) != null;
+        return get(userId, id) != null && mealRepository.remove(id) != null;
     }
 
     @Override
     public Meal get(int userId, int id) {
         log.info("get {}", id);
         Meal meal = mealRepository.get(id);
-        if(belongsToUser(userId,meal)) {
-            return meal;
-        }
-        return null;
+        return (meal != null && meal.getUserId() == userId) ?  meal : null;
     }
 
     @Override
     public List<Meal> getAll(int userId) {
         log.info("getAll");
         return mealRepository.values().stream()
-                .filter(meal -> belongsToUser(userId,meal))
+                .filter(meal -> meal.getUserId() == userId)
                 .sorted(MEAL_DATETIME_COMPARATOR)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Meal> getAllFiltered(int userId, LocalDateTime start, LocalDateTime end) {
+    public List<Meal> getAllFiltered(int userId, LocalDate start, LocalDate end) {
         log.info("getAllFiltered");
         return getAll(userId).stream()
-                .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), start.toLocalDate(),end.toLocalDate()))
+                .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), start,end))
                 .collect(Collectors.toList());
     }
 

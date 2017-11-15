@@ -50,7 +50,7 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public List<MealWithExceed> getAllFiltered(int userId, LocalDateTime start, LocalDateTime end, int calories) {
-        List<Meal> filteredByDate = repository.getAllFiltered(userId,start,end);
+        List<Meal> filteredByDate = repository.getAllFiltered(userId,start.toLocalDate(),end.toLocalDate());
         return MealsUtil.getFilteredWithExceeded(filteredByDate,
                 start.toLocalTime(),end.toLocalTime(),calories);
     }
