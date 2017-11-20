@@ -2,9 +2,17 @@ package ru.javawebinar.topjava.util;
 
 
 import ru.javawebinar.topjava.model.AbstractBaseEntity;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 public class ValidationUtil {
+
+    public static Meal checkIfDuplicateTimeDate(Meal meal) {
+        if(meal == null) {
+            throw new NotFoundException(meal + "has a duplicate date and time");
+        }
+        return meal;
+    }
 
     public static void checkNotFoundWithId(boolean found, int id) {
         checkNotFound(found, "id=" + id);
