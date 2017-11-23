@@ -1,5 +1,6 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c2feae26282446b0a5eefa3bcaf1638e)](https://www.codacy.com/app/MightyBeaver/topjava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MightyBeaver/topjava&amp;utm_campaign=Badge_Grade)
 [![Dependency Status](https://www.versioneye.com/user/projects/5a16d2620fb24f212afb2af1/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5a16d2620fb24f212afb2af1)
+[![Build Status](https://travis-ci.org/MightyBeaver/topjava.svg?branch=master)](https://travis-ci.org/MightyBeaver/topjava)
 
 Java Enterprise Online Project 
 ===============================
