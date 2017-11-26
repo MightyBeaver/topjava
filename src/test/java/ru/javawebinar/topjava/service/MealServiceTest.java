@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.service;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.ExternalResource;
+import org.junit.rules.Stopwatch;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -55,25 +56,22 @@ public class MealServiceTest {
 
         @Override
         protected void after() {
-            executionTimes.forEach(System.out::println);
+            executionTimes.forEach(log::info);
         }
     };
 
 
     @Rule
-    public TestWatcher watcher = new TestWatcher() {
+    public Stopwatch stopwatch = new Stopwatch() {
 
         @Override
-        protected void starting(Description description) {
-            executionTime = System.currentTimeMillis();
+        protected void finished(long nanos, Description description) {
+            log.info("{} finished in {} ms", description.getMethodName(), nanos/1000000);
+            executionTimes.add(description.getMethodName() + " finished in "+ nanos/1000000 + "ms");
         }
 
-        @Override
-        protected void finished(Description description) {
-            executionTime = System.currentTimeMillis() - executionTime;
-            executionTimes.add(description.getMethodName()+" completed in "+ executionTime + " ms");
-        }
     };
+
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
