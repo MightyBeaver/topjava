@@ -2,20 +2,17 @@ package ru.javawebinar.topjava.service;
 
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import ru.javawebinar.topjava.repository.JpaUtil;
 
 
-public class AbstractJpaBasedUserServiceTest extends AbstractUserServiceTest {
+public abstract class AbstractJpaBasedUserServiceTest extends AbstractUserServiceTest {
 
-    @Autowired
-    private CacheManager cacheManager;
     @Autowired
     protected JpaUtil jpaUtil;
 
     @Before
     public void setUp() throws Exception {
-        cacheManager.getCache("users").clear();
+        super.setUp();
         jpaUtil.clear2ndLevelHibernateCache();
     }
 }
